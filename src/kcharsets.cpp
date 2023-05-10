@@ -8,6 +8,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "kcharsets.h"
+#include "kcharsets_p.h"
 #include "kcodecs_debug.h"
 
 #include "kusasciitextcodec.h"
@@ -72,11 +73,11 @@ GB2312
 i18n:Chinese Simplified
 EUC-KR
 i18n:Korean
-cp 949
+windows-949
 i18n:Korean
 sjis
 i18n:Japanese
-jis7
+ISO-2022-JP
 i18n:Japanese
 EUC-JP
 i18n:Japanese
@@ -110,8 +111,6 @@ ucs2
 i18n:Unicode
 ISO 10646-UCS-2
 i18n:Unicode
-winsami2
-i18n:Northern Saami
 windows-1258
 i18n:Other
 IBM874
@@ -185,10 +184,10 @@ static const char language_for_encoding_string[] =
     "GB2312\0"
     "EUC-KR\0"
     QT_TRANSLATE_NOOP3("KCharsets", "Korean", "@item Text character set")"\0"
-    "cp 949\0"
+    "windows-949\0"
     "sjis\0"
     QT_TRANSLATE_NOOP3("KCharsets", "Japanese", "@item Text character set")"\0"
-    "jis7\0"
+    "ISO-2022-JP\0"
     "EUC-JP\0"
     "ISO 8859-7\0"
     QT_TRANSLATE_NOOP3("KCharsets", "Greek", "@item Text character set")"\0"
@@ -210,19 +209,16 @@ static const char language_for_encoding_string[] =
     "utf7\0"
     "ucs2\0"
     "ISO 10646-UCS-2\0"
-    "winsami2\0"
-    QT_TRANSLATE_NOOP3("KCharsets", "Northern Saami", "@item Text character set")"\0"
     "windows-1258\0"
     QT_TRANSLATE_NOOP3("KCharsets", "Other", "@item Text character set")"\0"
     "IBM874\0"
     "TSCII\0"
     "\0";
 
-static const int language_for_encoding_indices[] = {0,   11,  28,  11,  40,  11,  52,  11,  60,  11,  67,  78,  95,  78,  106, 117, 124, 117, 136,
-                                                    148, 169, 78,  177, 185, 193, 117, 201, 208, 217, 208, 228, 208, 236, 208, 243, 208, 250, 255,
-                                                    275, 255, 286, 294, 313, 294, 317, 294, 324, 331, 338, 331, 345, 350, 359, 350, 364, 350, 371,
-                                                    382, 388, 382, 396, 407, 414, 407, 422, 433, 440, 433, 453, 433, 461, 185, 472, 479, 484, 479,
-                                                    496, 502, 510, 502, 517, 502, 522, 502, 527, 502, 543, 552, 567, 580, 586, 580, 593, 580, -1};
+static const int language_for_encoding_indices[] = {
+    0,   11,  28,  11,  40,  11,  52,  11,  60,  11,  67,  78,  95,  78,  106, 117, 124, 117, 136, 148, 169, 78,  177, 185, 193, 117, 201, 208, 217, 208, 228,
+    208, 236, 208, 243, 208, 250, 255, 275, 255, 286, 294, 313, 294, 317, 294, 324, 331, 338, 331, 350, 355, 364, 355, 376, 355, 383, 394, 400, 394, 408, 419,
+    426, 419, 434, 445, 452, 445, 465, 445, 473, 185, 484, 491, 496, 491, 508, 514, 522, 514, 529, 514, 534, 514, 539, 514, 555, 568, 574, 568, 581, 568, -1};
 
 /*
  * GENERATED CODE ENDS HERE
@@ -473,31 +469,6 @@ static inline const char *kcharsets_array_search(const char *start, const int *i
     return nullptr;
 }
 
-class KCharsetsPrivate
-{
-public:
-    KCharsetsPrivate(KCharsets *_kc)
-        : usAsciiTextCodec{new KUsAsciiTextCodec}
-    {
-        kc = _kc;
-        codecForNameDict.reserve(43);
-    }
-
-    bool isUsAsciiTextCodecRequest(const QByteArray &name) const;
-
-    // Hash for the encoding names (sensitive case)
-    QHash<QByteArray, QTextCodec *> codecForNameDict;
-    KCharsets *kc;
-    // Using own variant due to broken ICU-based Qt codec, see QTBUG-83081.
-    // US-ASCII being an important one, but perhaps others also need their variant here?
-    // The life-time management is handled by Qt itself by
-    // auto-registration inside the QTextCodec constructor.
-    QTextCodec *const usAsciiTextCodec;
-
-    // Cache list so QStrings can be implicitly shared
-    QList<QStringList> encodingsByScript;
-};
-
 bool KCharsetsPrivate::isUsAsciiTextCodecRequest(const QByteArray &name) const
 {
     if (usAsciiTextCodec->name().compare(name, Qt::CaseInsensitive) == 0) {
@@ -709,7 +680,14 @@ QList<QStringList> KCharsets::encodingsByScript() const
     return d->encodingsByScript;
 }
 
+#if KCODECS_BUILD_DEPRECATED_SINCE(5, 101)
 QTextCodec *KCharsets::codecForName(const QString &n) const
+{
+    return d->codecForName(n);
+}
+#endif
+
+QTextCodec *KCharsetsPrivate::codecForName(const QString &n)
 {
     if (n == QLatin1String("gb2312") || n == QLatin1String("gbk")) {
         return QTextCodec::codecForName("gb18030");
@@ -723,7 +701,14 @@ QTextCodec *KCharsets::codecForName(const QString &n) const
     }
 }
 
+#if KCODECS_BUILD_DEPRECATED_SINCE(5, 101)
 QTextCodec *KCharsets::codecForName(const QString &n, bool &ok) const
+{
+    return d->codecForName(n, ok);
+};
+#endif
+
+QTextCodec *KCharsetsPrivate::codecForName(const QString &n, bool &ok)
 {
     if (n == QLatin1String("gb2312") || n == QLatin1String("gbk")) {
         ok = true;
@@ -740,24 +725,31 @@ QTextCodec *KCharsets::codecForName(const QString &n, bool &ok) const
     }
 }
 
+#if KCODECS_BUILD_DEPRECATED_SINCE(5, 101)
 QTextCodec *KCharsets::codecForNameOrNull(const QByteArray &n) const
+{
+    return d->codecForNameOrNull(n);
+}
+#endif
+
+QTextCodec *KCharsetsPrivate::codecForNameOrNull(const QByteArray &n)
 {
     QTextCodec *codec = nullptr;
 
     if (n.isEmpty()) {
-#pragma message("KDE5 TODO: Any better ideas ?")
+        // TODO: Any better ideas ?
         // No name, assume system locale
         const QByteArray locale = "->locale<-";
-        if (d->codecForNameDict.contains(locale)) {
-            return d->codecForNameDict.value(locale);
+        if (codecForNameDict.contains(locale)) {
+            return codecForNameDict.value(locale);
         }
         codec = QTextCodec::codecForLocale();
-        d->codecForNameDict.insert("->locale<-", codec);
+        codecForNameDict.insert("->locale<-", codec);
         return codec;
     }
     // For a non-empty name, lookup the "dictionary", in a case-sensitive way.
-    else if (d->codecForNameDict.contains(n)) {
-        return d->codecForNameDict.value(n);
+    else if (codecForNameDict.contains(n)) {
+        return codecForNameDict.value(n);
     }
 
     // If the name is not in the hash table,
@@ -771,8 +763,8 @@ QTextCodec *KCharsets::codecForNameOrNull(const QByteArray &n) const
     // our KUsAsciiTextCodec instance gets created, the Qt-built-in will be always
     // picked instead, at least for the used name.
     // So we cannot rely on the internal mechanisms, but have to prefer our codec ourselves.
-    if (d->isUsAsciiTextCodecRequest(n)) {
-        codec = d->usAsciiTextCodec;
+    if (isUsAsciiTextCodecRequest(n)) {
+        codec = usAsciiTextCodec;
     } else {
         // call directly QTextCodec::codecForName.
         // We assume that QTextCodec is smarter and more maintained than this code.
@@ -780,7 +772,7 @@ QTextCodec *KCharsets::codecForNameOrNull(const QByteArray &n) const
     }
 
     if (codec) {
-        d->codecForNameDict.insert(n, codec);
+        codecForNameDict.insert(n, codec);
         return codec;
     }
 
@@ -806,10 +798,9 @@ QTextCodec *KCharsets::codecForNameOrNull(const QByteArray &n) const
     if (changed) {
         codec = QTextCodec::codecForName(name);
         if (codec) {
-            d->codecForNameDict.insert(n, codec);
+            codecForNameDict.insert(n, codec);
             return codec;
         }
-        changed = false;
     }
 
     // these codecs are built into Qt, but the name given for the codec is different,
@@ -821,7 +812,7 @@ QTextCodec *KCharsets::codecForNameOrNull(const QByteArray &n) const
     }
 
     if (codec) {
-        d->codecForNameDict.insert(n, codec);
+        codecForNameDict.insert(n, codec);
         return codec;
     }
 
@@ -832,7 +823,7 @@ QTextCodec *KCharsets::codecForNameOrNull(const QByteArray &n) const
     if (!cname.isEmpty()) {
         codec = QTextCodec::codecForName(cname);
         if (codec) {
-            d->codecForNameDict.insert(n, codec);
+            codecForNameDict.insert(n, codec);
             return codec;
         }
     }

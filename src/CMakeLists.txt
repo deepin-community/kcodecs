@@ -98,7 +98,7 @@ ecm_generate_export_header(KF5Codecs
     GROUP_BASE_NAME KF
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
-    DEPRECATION_VERSIONS 5.5 5.56
+    DEPRECATION_VERSIONS 5.5 5.56 5.101
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
 )
 
@@ -123,25 +123,7 @@ ecm_generate_headers(KCodecs_HEADERS
   REQUIRED_HEADERS KCodecs_HEADERS
 )
 
-find_package(PythonModuleGeneration)
-
-if (PythonModuleGeneration_FOUND)
-  ecm_generate_python_binding(
-    TARGET KF5::Codecs
-    PYTHONNAMESPACE PyKF5
-    MODULENAME KCodecs
-    RULES_FILE "${CMAKE_SOURCE_DIR}/cmake/rules_PyKF5.py"
-    SIP_DEPENDS
-      QtCore/QtCoremod.sip
-    HEADERS
-      kcharsets.h
-      kcodecs.h
-      kencodingprober.h
-      kemailaddress.h
-  )
-endif()
-
-install(TARGETS KF5Codecs EXPORT KF5CodecsTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5Codecs EXPORT KF5CodecsTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/kcodecs_export.h
