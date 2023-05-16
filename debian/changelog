@@ -1,8 +1,9 @@
-kcodecs (5.90.0-1) UNRELEASED; urgency=medium
+kcodecs (5.90.0-1deepin1) unstable; urgency=medium
 
-  * update
+  * Release to unstable (5.90.0).
+  * Remove a #ifdef which no longer valid in newer Qt 5.x version
 
- -- Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>  Sun, 24 Apr 2022 15:42:29 +0800
+ -- Wang Zichong <wangzichong@deepin.org>  Tue, 16 May 2023 15:51:00 +0800
 
 kcodecs (5.90.0-1) experimental; urgency=medium
 
