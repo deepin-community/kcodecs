@@ -4,14 +4,15 @@ Source: https://invent.kde.org/frameworks/kcodecs
 Upstream-Contact: kde-frameworks-devel@kde.org
 
 Files: *
-Copyright: 1999, Lars Knoll <knoll@kde.org>
+Copyright: 2021, Friedrich W. H. Kossebau <kossebau@kde.org>
+           1999, Lars Knoll <knoll@kde.org>
            1999, Lars Knoll <knoll@mpi-hd.mpg.de>
            2001-2004, Marc Mutz <mutz@kde.org>
            2004, Matt Douhan <matt@fruitsalad.org>
            2007, Nick Shaforostoff <shafff@ukr.net>
            2001-2006, Nicolas GOUTTE <goutte@kde.org>
            2010, Thomas McGuire <mcguire@kde.org>
-           2010, Volker Krause <vkrause@kde.org>
+           2010-2021, Volker Krause <vkrause@kde.org>
            2008, Wang Hoi <zealot.hoi@gmail.com>
            2009, Adriaan de Groot, Mustapha Abubakar, Ibrahim Dasuna
            2006, Canonical Ltd, and Rosetta Contributors 2006
@@ -28,15 +29,17 @@ Copyright: 1999, Lars Knoll <knoll@kde.org>
            2001, translate.org.za
 License: LGPL-2+
 
-Files: src/probers/*
-Copyright: 1998, <developer@mozilla.org>
-           2008, <wkai@gmail.com>
-           2008, <zealot.kai@gmail.com>
-License: Expat
+Files: autotests/kcharsetstest.cpp
+       autotests/kcharsetstest.h
+       autotests/kencodingprobertest.cpp
+       autotests/kencodingprobertest.h
+       autotests/kusasciitextcodectest.cpp
+Copyright: 2021, Friedrich W. H. Kossebau <kossebau@kde.org>
+           2012, Ni Hui <shuizhuyuanluo@126.com>
+           2011, Romain Perier <bambi@kubuntu.org>
+License: GPL-2+
 
-Files: autotests/kcodecstest.cpp
-       autotests/kcodecstest.h
-       autotests/kemailaddresstest.cpp
+Files: autotests/kemailaddresstest.cpp
        autotests/kemailaddresstest.h
        autotests/rfc2047test.cpp
        autotests/rfc2047test.h
@@ -47,40 +50,32 @@ Copyright: 2014, Daniel Vrátil <dvratil@redhat.com>
            2004, David Faure <faure@kde.org>
            2000-2001, Dawit Alemayehu <adawit@kde.org>
            2001-2002, Marc Mutz <mutz@kde.org>
-           2001, Rik Hemsley (rikkus) <rik@kde.org>
+           2001, Rik Hemsley <rikkus> <rik@kde.org>
            2009, Thomas McGuire <mcguire@kde.org>
            2006, Volker Krause <vkrause@kde.org>
-           1991-1992, RSA Data Security Inc.
-           1995, Mordechai T. Abzug
-           1996-1999, Ronald Tschalär
 License: LGPL-2
 
-Files: autotests/kcharsetstest.cpp
-       autotests/kcharsetstest.h
-       autotests/kencodingprobertest.cpp
-       autotests/kencodingprobertest.h
-Copyright: 1989-1991, Free Software Foundation, Inc
-           2012, Ni Hui <shuizhuyuanluo@126.com>
-           2011, Romain Perier <bambi@kubuntu.org>
-License: GPL-2+
-
-Files: po/ca/*
-       po/ca@valencia/*
-       po/uk/*
-Copyright: 2014-2017, This_file_is_part_of_KDE
-License: LGPL-2.1+3+KDEeV
+Files: src/probers/*
+Copyright: 1998, <developer@mozilla.org>
+           1998, Netscape Communications Corporation <developer@mozilla.org>
+           2008, Wang Kai <wkai@gmail.com>
+           2008, Wang Kai <zealot.kai@gmail.com>
+License: MIT
 
 Files: src/probers/nsSBCSGroupProber.h
        src/probers/nsSJISProber.h
 Copyright: 1998-2001, Netscape Communications Corporation
 License: MPL-1.1 or GPL-2+ or LGPL-2.1+
 
-Files: cmake/*
-Copyright: 2016, Stephen Kelly <steveire@gmail.com>
-License: BSD-3-clause
+Files: poqm/ca/*
+       poqm/ca@valencia/*
+       poqm/uk/*
+Copyright: 2014-2017, This_file_is_part_of_KDE
+License: LGPL-2.1+3+KDEeV
 
 Files: debian/*
 Copyright: 2014, Rohan Garg <rohangarg@kubuntu.org>
+           2022, Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 License: LGPL-2+
 
 License: BSD-3-clause
@@ -107,7 +102,7 @@ License: BSD-3-clause
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-License: Expat
+License: MIT
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files (the
  "Software"), to deal in the Software without restriction, including
