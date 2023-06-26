@@ -37,6 +37,8 @@ libKF5Codecs.so.5 libkf5codecs5 #MINVER#
  _ZN15KEncodingProberC2ENS_10ProberTypeE@Base 4.96.0
  _ZN15KEncodingProberD1Ev@Base 4.96.0
  _ZN15KEncodingProberD2Ev@Base 4.96.0
+ _ZN16KCharsetsPrivate12codecForNameERK7QString@Base 5.102.0
+ _ZN16KCharsetsPrivate12codecForNameERK7QStringRb@Base 5.102.0
  _ZN7KCodecs12base45DecodeERK10QByteArray@Base 5.90.0
  _ZN7KCodecs12base64DecodeERK10QByteArray@Base 4.96.0
  _ZN7KCodecs12base64DecodeERK10QByteArrayRS0_@Base 4.96.0

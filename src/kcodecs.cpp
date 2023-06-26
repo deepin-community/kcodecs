@@ -23,6 +23,7 @@
 
 #include "kcodecs.h"
 #include "kcharsets.h"
+#include "kcharsets_p.h"
 #include "kcodecs_debug.h"
 #include "kcodecs_p.h"
 #include "kcodecsbase64.h"
@@ -52,10 +53,11 @@ static QList<QByteArray> charsetCache;
 
 QByteArray cachedCharset(const QByteArray &name)
 {
-    for (const QByteArray &charset : qAsConst(charsetCache)) {
-        if (qstricmp(name.data(), charset.data()) == 0) {
-            return charset;
-        }
+    auto it = std::find_if(charsetCache.cbegin(), charsetCache.cend(), [&name](const QByteArray &charset) {
+        return qstricmp(name.data(), charset.data()) == 0;
+    });
+    if (it != charsetCache.cend()) {
+        return *it;
     }
 
     charsetCache.append(name.toUpper());
@@ -316,12 +318,12 @@ bool parseEncodedWord(const char *&scursor,
     QByteArray cs;
     QTextCodec *textCodec = nullptr;
     if (charsetOption == KCodecs::ForceDefaultCharset || maybeCharset.isEmpty()) {
-        textCodec = KCharsets::charsets()->codecForName(QLatin1String(defaultCS), matchOK);
+        textCodec = KCharsets::charsets()->d->codecForName(QLatin1String(defaultCS), matchOK);
         cs = cachedCharset(defaultCS);
     } else {
-        textCodec = KCharsets::charsets()->codecForName(QLatin1String(maybeCharset), matchOK);
+        textCodec = KCharsets::charsets()->d->codecForName(QLatin1String(maybeCharset), matchOK);
         if (!matchOK) { // no suitable codec found => use default charset
-            textCodec = KCharsets::charsets()->codecForName(QLatin1String(defaultCS), matchOK);
+            textCodec = KCharsets::charsets()->d->codecForName(QLatin1String(defaultCS), matchOK);
             cs = cachedCharset(defaultCS);
         } else {
             cs = cachedCharset(maybeCharset);
@@ -446,7 +448,7 @@ QByteArray KCodecs::encodeRFC2047String(const QString &src, const QByteArray &ch
     bool useQEncoding = false;
 
     // fromLatin1() is safe here, codecForName() uses toLatin1() internally
-    const QTextCodec *codec = KCharsets::charsets()->codecForName(QString::fromLatin1(charset), ok);
+    const QTextCodec *codec = KCharsets::charsets()->d->codecForName(QString::fromLatin1(charset), ok);
 
     QByteArray usedCS;
     if (!ok) {
@@ -510,10 +512,9 @@ QByteArray KCodecs::encodeRFC2047String(const QString &src, const QByteArray &ch
         if (useQEncoding) {
             result += "?Q?";
 
-            char c;
             char hexcode; // "Q"-encoding implementation described in RFC 2047
             for (int i = start; i < end; i++) {
-                c = encoded8Bit[i];
+                const char c = encoded8Bit[i];
                 if (c == ' ') { // make the result readable with not MIME-capable readers
                     result += '_';
                 } else {
@@ -609,8 +610,8 @@ KCodecs::Codec *KCodecs::Codec::codecForName(const QByteArray &name)
 bool KCodecs::Codec::encode(const char *&scursor, const char *const send, char *&dcursor, const char *const dend, NewlineType newline) const
 {
     // get an encoder:
-    QScopedPointer<Encoder> enc(makeEncoder(newline));
-    if (enc.isNull()) {
+    std::unique_ptr<Encoder> enc(makeEncoder(newline));
+    if (!enc) {
         qWarning() << "makeEncoder failed for" << name();
         return false;
     }
@@ -681,8 +682,8 @@ QByteArray KCodecs::Codec::decode(const QByteArray &src, NewlineType newline) co
 bool KCodecs::Codec::decode(const char *&scursor, const char *const send, char *&dcursor, const char *const dend, NewlineType newline) const
 {
     // get a decoder:
-    QScopedPointer<Decoder> dec(makeDecoder(newline));
-    assert(!dec.isNull());
+    std::unique_ptr<Decoder> dec(makeDecoder(newline));
+    assert(dec);
 
     // decode and check for output buffer overflow:
     while (!dec->decode(scursor, send, dcursor, dend)) {
