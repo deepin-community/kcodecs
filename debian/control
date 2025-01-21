@@ -3,11 +3,11 @@ Section: kde
 Priority: optional
 Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 Uploaders: Aurélien COUDERC <coucouf@debian.org>,
-           Norbert Preining <norbert@preining.info>,
+           Patrick Franz <deltaone@debian.org>,
 Build-Depends: cmake (>= 3.16~),
                debhelper-compat (= 13),
                doxygen,
-               extra-cmake-modules (>= 5.103.0~),
+               extra-cmake-modules (>= 5.115.0~),
                gperf,
                libqt5sql5-sqlite:native,
                pkg-kde-tools (>= 0.15.15ubuntu1~),
@@ -32,6 +32,7 @@ Description: collection of methods to manipulate strings
 
 Package: libkf5codecs-dev
 Architecture: any
+Multi-Arch: same
 Section: libdevel
 Depends: libkf5codecs5 (= ${binary:Version}),
          qtbase5-dev (>= 5.15.2~),
