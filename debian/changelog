@@ -1,3 +1,41 @@
+kcodecs (5.115.0-2) unstable; urgency=medium
+
+  [ Patrick Franz ]
+  * Upload to unstable.
+
+ -- Patrick Franz <deltaone@debian.org>  Sun, 05 May 2024 00:10:00 +0200
+
+kcodecs (5.115.0-1) experimental; urgency=medium
+
+  [ Patrick Franz ]
+  * New upstream release (5.115.0).
+  * Update build-deps and deps with the info from cmake.
+  * Add myself as uploader and remove inactive ones. Thank you for your
+    work.
+  * Mark libkf5codecs-dev Multi-Arch: same, thx to Helmut Grohne
+    (Closes: #1024023).
+
+ -- Patrick Franz <deltaone@debian.org>  Sat, 16 Mar 2024 12:35:39 +0100
+
+kcodecs (5.107.0-1) unstable; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (5.105.0).
+  * Update build-deps and deps with the info from cmake.
+  * New upstream release (5.107.0).
+  * Update build-deps and deps with the info from cmake.
+  * Release to unstable.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Sun, 18 Jun 2023 16:08:26 +0200
+
+kcodecs (5.104.0-1) experimental; urgency=medium
+
+  [ Aurélien COUDERC ]
+  * New upstream release (5.104.0).
+  * Update build-deps and deps with the info from cmake.
+
+ -- Aurélien COUDERC <coucouf@debian.org>  Wed, 15 Mar 2023 16:09:47 +0100
+
 kcodecs (5.103.0-1) unstable; urgency=medium
 
   [ Aurélien COUDERC ]
